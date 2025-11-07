@@ -5,13 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bread Shortcut</title>
 
-  <!-- Style frameworks -->
+  <!-- Framework styles -->
   <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-jsoneditor@0.20.3/dist/vanilla-jsoneditor.min.css"/>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <!-- Working JSONEditor build -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanilla-jsoneditor@0.20.3/dist/vanilla-jsoneditor.min.css"
+  />
   <script src="https://cdn.jsdelivr.net/npm/vanilla-jsoneditor@0.20.3/dist/vanilla-jsoneditor.min.js"></script>
+
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
   <style>
     main.container {
@@ -31,6 +36,7 @@
     }
   </style>
 </head>
+
 <body>
   <main class="container">
     <h1>Bread Shortcut</h1>
@@ -210,6 +216,8 @@
       } else {
         editorInstance.set({ json: data });
       }
+
+      flash("Loaded JSONEditor successfully");
     }
 
     // --- Save JSON to Supabase ---
@@ -254,4 +262,3 @@
   </script>
 </body>
 </html>
-
