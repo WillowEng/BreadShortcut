@@ -4,65 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bread Shortcut</title>
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      padding: 2rem;
-      max-width: 700px;
-      margin: auto;
-      background: #f7fafc;
-      color: #1a202c;
+    main.container {
+      max-width: 800px;
+      margin: 2rem auto;
     }
-    h1 { text-align: center; margin-bottom: 1.5rem; }
-    input, button {
+    textarea {
       width: 100%;
-      font-size: 1rem;
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      min-height: 50vh;
+      font-family: monospace;
+      font-size: 0.9rem;
     }
-    button {
-      background: #2f855a;
-      color: white;
-      cursor: pointer;
+    #msg {
+      text-align: center;
+      font-weight: 500;
     }
-    button:hover { background: #38a169; }
     .hidden { display: none; }
-    pre {
-      background: #edf2f7;
-      padding: 1rem;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
-    #msg { margin: 0.5rem 0; color: #155724; font-weight: 500; }
   </style>
 </head>
 <body>
-  <h1>Bread Shortcut</h1>
-  <div id="msg"></div>
+  <main class="container">
+    <h1>Bread Shortcut</h1>
+    <p id="msg"></p>
 
-  <!-- Login / Signup -->
-  <div id="auth-view">
-    <h3>Sign in or create an account</h3>
-    <input id="email" type="email" placeholder="Email" />
-    <input id="password" type="password" placeholder="Password" />
-    <button id="login-btn">Continue</button>
-  </div>
+    <!-- LOGIN -->
+    <section id="auth-view">
+      <h3>Sign in or create an account</h3>
+      <input id="email" type="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="login-btn" class="contrast">Continue</button>
+    </section>
 
-  <!-- Selector -->
-  <div id="select-view" class="hidden">
-    <h3>Select JSON to view</h3>
-    <button data-type="bread-dict">Bread Dict</button>
-    <button data-type="sd-ferment-timing">SD Ferment Timing</button>
-    <button data-type="shortcut-settings">Shortcut Settings</button>
-    <button id="logout-btn" style="background:#718096;margin-top:1rem;">Logout</button>
-    <pre id="json-display"></pre>
-  </div>
+    <!-- SELECTOR -->
+    <section id="select-view" class="hidden">
+      <h3>Select JSON to Edit</h3>
+      <nav>
+        <ul>
+          <li><button data-type="bread-dict">Bread Dict</button></li>
+          <li><button data-type="sd-ferment-timing">SD Ferment Timing</button></li>
+          <li><button data-type="shortcut-settings">Shortcut Settings</button></li>
+        </ul>
+      </nav>
+      <button id="logout-btn" class="secondary">Logout</button>
+
+      <!-- EDITOR -->
+      <article id="editor" class="hidden">
+        <h4 id="editor-title"></h4>
+        <textarea id="json-editor"></textarea>
+        <footer>
+          <button id="save-btn" class="primary">Save Changes</button>
+          <button id="reset-btn" class="secondary">Reset</button>
+        </footer>
+      </article>
+    </section>
+  </main>
 
   <script>
-    // --- Supabase setup ---
+    // --- Supabase Config ---
     const SUPABASE_URL = "https://wxyjexituglbdyrirngj.supabase.co";
     const SUPABASE_KEY = "sb_publishable_EOo0sH3tQgN0AuyxJwlpCw_D-OAZ5sw";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -71,23 +71,24 @@
     const msg = document.getElementById("msg");
     const authView = document.getElementById("auth-view");
     const selectView = document.getElementById("select-view");
-    const jsonDisplay = document.getElementById("json-display");
-
+    const editor = document.getElementById("editor");
+    const editorTitle = document.getElementById("editor-title");
+    const jsonEditor = document.getElementById("json-editor");
     let currentUser = null;
+    let currentType = null;
 
     // --- Helpers ---
-    function flash(text, color = "#155724") {
+    function flash(text, color="#155724") {
       msg.style.color = color;
       msg.textContent = text;
       console.log(text);
     }
-
     function show(view) {
       [authView, selectView].forEach(v => v.classList.add("hidden"));
       view.classList.remove("hidden");
     }
 
-    // --- Combined Sign Up + Login ---
+    // --- Auth Logic (Signup + Login Combined) ---
     document.getElementById("login-btn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -95,11 +96,9 @@
 
       flash("Attempting login/signup...");
 
-      // Try sign up first
       const { data: signup, error: signErr } = await supabaseClient.auth.signUp({ email, password });
 
       if (signErr && signErr.message.includes("registered")) {
-        // If user already exists, log them in
         const { data: signin, error: loginErr } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (loginErr) return flash("Login error: " + loginErr.message, "red");
         currentUser = signin.user;
@@ -112,7 +111,6 @@
       }
 
       if (!currentUser) return flash("User not found after login.", "red");
-
       await ensureDefaults(currentUser.id);
       show(selectView);
     });
@@ -125,11 +123,9 @@
       show(authView);
     });
 
-    // --- Insert default JSONs if needed ---
+    // --- Ensure Defaults Exist ---
     async function ensureDefaults(userId) {
       try {
-        flash("Checking defaults...");
-
         const { data: rows } = await supabaseClient
           .from("bread_dicts")
           .select("type")
@@ -140,7 +136,7 @@
           return;
         }
 
-        flash("Loading default JSON files...");
+        flash("Inserting default JSON files...");
         const bread = await (await fetch("bread-dict.json")).json();
         const timing = await (await fetch("sd-ferment-timing.json")).json();
         const settings = await (await fetch("shortcut-settings.json")).json();
@@ -150,31 +146,62 @@
           { user_id: userId, type: "sd-ferment-timing", data: timing },
           { user_id: userId, type: "shortcut-settings", data: settings }
         ]);
-
-        if (error) flash("Insert error: " + error.message, "red");
-        else flash("Defaults inserted successfully!");
+        if (error) throw error;
+        flash("Default JSONs added!");
       } catch (err) {
         flash("Error inserting defaults: " + err.message, "red");
       }
     }
 
-    // --- Fetch JSON data ---
+    // --- Load JSON into Editor ---
     document.querySelectorAll("#select-view button[data-type]").forEach(btn => {
       btn.addEventListener("click", async e => {
-        const type = e.target.dataset.type;
+        currentType = e.target.dataset.type;
+        flash("Loading " + currentType + "...");
         const { data, error } = await supabaseClient
           .from("bread_dicts")
           .select("data")
           .eq("user_id", currentUser.id)
-          .eq("type", type)
+          .eq("type", currentType)
           .single();
 
         if (error) return flash("Error loading: " + error.message, "red");
-        jsonDisplay.textContent = JSON.stringify(data.data, null, 2);
+        editorTitle.textContent = "Editing: " + currentType;
+        jsonEditor.value = JSON.stringify(data.data, null, 2);
+        editor.classList.remove("hidden");
       });
     });
 
-    // --- Auto-login if session exists ---
+    // --- Save JSON back to Supabase ---
+    document.getElementById("save-btn").addEventListener("click", async () => {
+      try {
+        const updated = JSON.parse(jsonEditor.value);
+        const { error } = await supabaseClient
+          .from("bread_dicts")
+          .update({ data: updated })
+          .eq("user_id", currentUser.id)
+          .eq("type", currentType);
+        if (error) throw error;
+        flash("Saved successfully!");
+      } catch (err) {
+        flash("Invalid JSON or save error: " + err.message, "red");
+      }
+    });
+
+    // --- Reset JSON to last saved ---
+    document.getElementById("reset-btn").addEventListener("click", async () => {
+      const { data, error } = await supabaseClient
+        .from("bread_dicts")
+        .select("data")
+        .eq("user_id", currentUser.id)
+        .eq("type", currentType)
+        .single();
+      if (error) return flash("Error reloading: " + error.message, "red");
+      jsonEditor.value = JSON.stringify(data.data, null, 2);
+      flash("Reset to saved version.");
+    });
+
+    // --- Auto-login if session still valid ---
     (async () => {
       const { data } = await supabaseClient.auth.getUser();
       if (data?.user) {
