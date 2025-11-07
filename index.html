@@ -1,264 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bread Shortcut</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bread Shortcut</title>
 
-  <!-- Framework styles -->
-  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <!-- PicoCSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+    />
 
-  <!-- Working JSONEditor build (unpkg CDN) -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/vanilla-jsoneditor@0.20.3/dist/vanilla-jsoneditor.min.css"
-  />
-  <script src="https://unpkg.com/vanilla-jsoneditor@0.20.3/dist/vanilla-jsoneditor.min.js"></script>
+    <!-- JSONEditor stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/vanilla-jsoneditor/themes/jse-theme-default.min.css"
+    />
 
-  <!-- Supabase -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+      main.container {
+        max-width: 900px;
+        margin: 2rem auto;
+      }
+      #msg {
+        text-align: center;
+        font-weight: 500;
+      }
+      .hidden {
+        display: none;
+      }
+      #jsoneditor {
+        height: 65vh;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+    </style>
+  </head>
 
-  <style>
-    main.container {
-      max-width: 900px;
-      margin: 2rem auto;
-    }
-    #msg {
-      text-align: center;
-      font-weight: 500;
-    }
-    .hidden { display: none; }
-    #jsoneditor {
-      height: 65vh;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-  </style>
-</head>
+  <body>
+    <main class="container">
+      <h1>Bread Shortcut</h1>
+      <p id="msg"></p>
 
-<body>
-  <main class="container">
-    <h1>Bread Shortcut</h1>
-    <p id="msg"></p>
+      <!-- LOGIN -->
+      <section id="auth-view">
+        <h3>Sign in or create an account</h3>
+        <input id="email" type="email" placeholder="Email" />
+        <input id="password" type="password" placeholder="Password" />
+        <button id="login-btn" class="contrast">Continue</button>
+      </section>
 
-    <!-- LOGIN -->
-    <section id="auth-view">
-      <h3>Sign in or create an account</h3>
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button id="login-btn" class="contrast">Continue</button>
-    </section>
+      <!-- SELECTOR -->
+      <section id="select-view" class="hidden">
+        <h3>Select JSON to Edit</h3>
+        <nav>
+          <ul>
+            <li><button data-type="bread-dict">Bread Dict</button></li>
+            <li><button data-type="sd-ferment-timing">SD Ferment Timing</button></li>
+            <li><button data-type="shortcut-settings">Shortcut Settings</button></li>
+          </ul>
+        </nav>
+        <button id="logout-btn" class="secondary">Logout</button>
 
-    <!-- SELECTOR -->
-    <section id="select-view" class="hidden">
-      <h3>Select JSON to Edit</h3>
-      <nav>
-        <ul>
-          <li><button data-type="bread-dict">Bread Dict</button></li>
-          <li><button data-type="sd-ferment-timing">SD Ferment Timing</button></li>
-          <li><button data-type="shortcut-settings">Shortcut Settings</button></li>
-        </ul>
-      </nav>
-      <button id="logout-btn" class="secondary">Logout</button>
+        <!-- EDITOR -->
+        <article id="editor" class="hidden">
+          <h4 id="editor-title"></h4>
+          <div id="jsoneditor"></div>
+          <footer>
+            <button id="save-btn" class="primary">Save Changes</button>
+            <button id="reset-btn" class="secondary">Reset</button>
+          </footer>
+        </article>
+      </section>
+    </main>
 
-      <!-- EDITOR -->
-      <article id="editor" class="hidden">
-        <h4 id="editor-title"></h4>
-        <div id="jsoneditor"></div>
-        <footer>
-          <button id="save-btn" class="primary">Save Changes</button>
-          <button id="reset-btn" class="secondary">Reset</button>
-        </footer>
-      </article>
-    </section>
-  </main>
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-  <script>
-    // --- Supabase Config ---
-    const SUPABASE_URL = "https://wxyjexituglbdyrirngj.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_EOo0sH3tQgN0AuyxJwlpCw_D-OAZ5sw";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <!-- JSONEditor (modern ES module) -->
+    <script type="module">
+      import { createJSONEditor } from "https://unpkg.com/vanilla-jsoneditor/standalone.js"
 
-    // --- Elements ---
-    const msg = document.getElementById("msg");
-    const authView = document.getElementById("auth-view");
-    const selectView = document.getElementById("select-view");
-    const editor = document.getElementById("editor");
-    const editorTitle = document.getElementById("editor-title");
-    const jsonContainer = document.getElementById("jsoneditor");
+      const SUPABASE_URL = "https://wxyjexituglbdyrirngj.supabase.co"
+      const SUPABASE_KEY = "sb_publishable_EOo0sH3tQgN0AuyxJwlpCw_D-OAZ5sw"
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
-    let currentUser = null;
-    let currentType = null;
-    let currentJson = {};
-    let editorInstance = null;
+      const msg = document.getElementById("msg")
+      const authView = document.getElementById("auth-view")
+      const selectView = document.getElementById("select-view")
+      const editor = document.getElementById("editor")
+      const editorTitle = document.getElementById("editor-title")
+      const jsonContainer = document.getElementById("jsoneditor")
 
-    // --- Helpers ---
-    function flash(text, color="#155724") {
-      msg.style.color = color;
-      msg.textContent = text;
-      console.log(text);
-    }
+      let currentUser = null
+      let currentType = null
+      let currentJson = {}
+      let editorInstance = null
 
-    function show(view) {
-      [authView, selectView].forEach(v => v.classList.add("hidden"));
-      view.classList.remove("hidden");
-    }
-
-    // --- Auth Logic (Signup + Login Combined) ---
-    document.getElementById("login-btn").addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      if (!email || !password) return flash("Enter email and password", "red");
-
-      flash("Attempting login/signup...");
-
-      const { data: signup, error: signErr } = await supabaseClient.auth.signUp({ email, password });
-
-      if (signErr && signErr.message.includes("registered")) {
-        const { data: signin, error: loginErr } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (loginErr) return flash("Login error: " + loginErr.message, "red");
-        currentUser = signin.user;
-        flash("Welcome back, " + currentUser.email);
-      } else if (signErr) {
-        return flash("Signup error: " + signErr.message, "red");
-      } else {
-        currentUser = signup.user;
-        flash("New user created: " + currentUser.email);
+      function flash(text, color = "#155724") {
+        msg.style.color = color
+        msg.textContent = text
+        console.log(text)
       }
 
-      if (!currentUser) return flash("User not found after login.", "red");
-      await ensureDefaults(currentUser.id);
-      show(selectView);
-    });
+      function show(view) {
+        [authView, selectView].forEach((v) => v.classList.add("hidden"))
+        view.classList.remove("hidden")
+      }
 
-    // --- Logout ---
-    document.getElementById("logout-btn").addEventListener("click", async () => {
-      await supabaseClient.auth.signOut();
-      currentUser = null;
-      flash("Logged out.");
-      show(authView);
-    });
+      document.getElementById("login-btn").addEventListener("click", async () => {
+        const email = document.getElementById("email").value.trim()
+        const password = document.getElementById("password").value.trim()
+        if (!email || !password) return flash("Enter email and password", "red")
 
-    // --- Ensure Defaults Exist ---
-    async function ensureDefaults(userId) {
-      try {
-        const { data: rows } = await supabaseClient
-          .from("bread_dicts")
-          .select("type")
-          .eq("user_id", userId);
+        flash("Attempting login/signup...")
 
-        if (rows && rows.length > 0) {
-          flash("Defaults already exist.");
-          return;
+        const { data: signup, error: signErr } = await supabaseClient.auth.signUp({
+          email,
+          password,
+        })
+
+        if (signErr && signErr.message.includes("registered")) {
+          const { data: signin, error: loginErr } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          })
+          if (loginErr) return flash("Login error: " + loginErr.message, "red")
+          currentUser = signin.user
+          flash("Welcome back, " + currentUser.email)
+        } else if (signErr) {
+          return flash("Signup error: " + signErr.message, "red")
+        } else {
+          currentUser = signup.user
+          flash("New user created: " + currentUser.email)
         }
 
-        flash("Inserting default JSON files...");
-        const bread = await (await fetch("bread-dict.json")).json();
-        const timing = await (await fetch("sd-ferment-timing.json")).json();
-        const settings = await (await fetch("shortcut-settings.json")).json();
+        if (!currentUser) return flash("User not found after login.", "red")
+        await ensureDefaults(currentUser.id)
+        show(selectView)
+      })
 
-        const { error } = await supabaseClient.from("bread_dicts").insert([
-          { user_id: userId, type: "bread-dict", data: bread },
-          { user_id: userId, type: "sd-ferment-timing", data: timing },
-          { user_id: userId, type: "shortcut-settings", data: settings }
-        ]);
-        if (error) throw error;
-        flash("Default JSONs added!");
-      } catch (err) {
-        flash("Error inserting defaults: " + err.message, "red");
+      document.getElementById("logout-btn").addEventListener("click", async () => {
+        await supabaseClient.auth.signOut()
+        currentUser = null
+        flash("Logged out.")
+        show(authView)
+      })
+
+      async function ensureDefaults(userId) {
+        try {
+          const { data: rows } = await supabaseClient
+            .from("bread_dicts")
+            .select("type")
+            .eq("user_id", userId)
+
+          if (rows && rows.length > 0) {
+            flash("Defaults already exist.")
+            return
+          }
+
+          flash("Inserting default JSON files...")
+          const bread = await (await fetch("bread-dict.json")).json()
+          const timing = await (await fetch("sd-ferment-timing.json")).json()
+          const settings = await (await fetch("shortcut-settings.json")).json()
+
+          const { error } = await supabaseClient.from("bread_dicts").insert([
+            { user_id: userId, type: "bread-dict", data: bread },
+            { user_id: userId, type: "sd-ferment-timing", data: timing },
+            { user_id: userId, type: "shortcut-settings", data: settings },
+          ])
+          if (error) throw error
+          flash("Default JSONs added!")
+        } catch (err) {
+          flash("Error inserting defaults: " + err.message, "red")
+        }
       }
-    }
 
-    // --- Load JSON into Editor ---
-    document.querySelectorAll("#select-view button[data-type]").forEach(btn => {
-      btn.addEventListener("click", async e => {
-        currentType = e.target.dataset.type;
-        flash("Loading " + currentType + "...");
+      document.querySelectorAll("#select-view button[data-type]").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          currentType = e.target.dataset.type
+          flash("Loading " + currentType + "...")
+          const { data, error } = await supabaseClient
+            .from("bread_dicts")
+            .select("data")
+            .eq("user_id", currentUser.id)
+            .eq("type", currentType)
+            .single()
+
+          if (error) return flash("Error loading: " + error.message, "red")
+
+          currentJson = data.data
+          editorTitle.textContent = "Editing: " + currentType
+          showEditor(currentJson)
+        })
+      })
+
+      function showEditor(data) {
+        editor.classList.remove("hidden")
+
+        if (!editorInstance) {
+          editorInstance = createJSONEditor({
+            target: jsonContainer,
+            props: {
+              content: { json: data },
+              mode: "tree",
+              onChange: (updatedContent) => {
+                try {
+                  currentJson = updatedContent.json
+                } catch (e) {
+                  console.warn("Invalid JSON edit", e)
+                }
+              },
+            },
+          })
+        } else {
+          editorInstance.set({ json: data })
+        }
+
+        flash("Loaded JSONEditor successfully")
+      }
+
+      document.getElementById("save-btn").addEventListener("click", async () => {
+        try {
+          const updated = currentJson
+          const { error } = await supabaseClient
+            .from("bread_dicts")
+            .update({ data: updated })
+            .eq("user_id", currentUser.id)
+            .eq("type", currentType)
+          if (error) throw error
+          flash("Saved successfully!")
+        } catch (err) {
+          flash("Save error: " + err.message, "red")
+        }
+      })
+
+      document.getElementById("reset-btn").addEventListener("click", async () => {
         const { data, error } = await supabaseClient
           .from("bread_dicts")
           .select("data")
           .eq("user_id", currentUser.id)
           .eq("type", currentType)
-          .single();
+          .single()
+        if (error) return flash("Error reloading: " + error.message, "red")
+        currentJson = data.data
+        editorInstance.set({ json: currentJson })
+        flash("Reset to saved version.")
+      })
 
-        if (error) return flash("Error loading: " + error.message, "red");
-
-        currentJson = data.data;
-        editorTitle.textContent = "Editing: " + currentType;
-        showEditor(currentJson);
-      });
-    });
-
-    // --- Initialize or Update JSONEditor ---
-    function showEditor(data) {
-      editor.classList.remove("hidden");
-
-      if (!editorInstance) {
-        editorInstance = new window.JSONEditor({
-          target: jsonContainer,
-          props: {
-            mode: "tree",
-            mainMenuBar: true,
-            navigationBar: false,
-            statusBar: false,
-            content: { json: data },
-            onChange: () => {
-              try {
-                const updated = editorInstance.get();
-                currentJson = updated.json;
-              } catch (e) {
-                console.warn("Invalid JSON edit", e);
-              }
-            }
-          }
-        });
-      } else {
-        editorInstance.set({ json: data });
-      }
-
-      flash("Loaded JSONEditor successfully");
-    }
-
-    // --- Save JSON to Supabase ---
-    document.getElementById("save-btn").addEventListener("click", async () => {
-      try {
-        const updated = currentJson;
-        const { error } = await supabaseClient
-          .from("bread_dicts")
-          .update({ data: updated })
-          .eq("user_id", currentUser.id)
-          .eq("type", currentType);
-        if (error) throw error;
-        flash("Saved successfully!");
-      } catch (err) {
-        flash("Save error: " + err.message, "red");
-      }
-    });
-
-    // --- Reset JSON to Last Saved Version ---
-    document.getElementById("reset-btn").addEventListener("click", async () => {
-      const { data, error } = await supabaseClient
-        .from("bread_dicts")
-        .select("data")
-        .eq("user_id", currentUser.id)
-        .eq("type", currentType)
-        .single();
-      if (error) return flash("Error reloading: " + error.message, "red");
-      currentJson = data.data;
-      editorInstance.set({ json: currentJson });
-      flash("Reset to saved version.");
-    });
-
-    // --- Auto-login if Session Still Valid ---
-    (async () => {
-      const { data } = await supabaseClient.auth.getUser();
-      if (data?.user) {
-        currentUser = data.user;
-        flash("Welcome back, " + currentUser.email);
-        show(selectView);
-      }
-    })();
-  </script>
-</body>
+      ;(async () => {
+        const { data } = await supabaseClient.auth.getUser()
+        if (data?.user) {
+          currentUser = data.user
+          flash("Welcome back, " + currentUser.email)
+          show(selectView)
+        }
+      })()
+    </script>
+  </body>
 </html>
