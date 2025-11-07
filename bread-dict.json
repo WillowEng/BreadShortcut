@@ -1,0 +1,932 @@
+{
+  "Sourdough Bread": {
+    "Multigrain Hearth Bread": {
+      "Source": "Peter Reinhart's Whole Grain Breads p.161 (Modified)",
+      "RecipeCount": 1,
+      "MyDefaultCount": 2,
+      "MyDefaultSize": 900,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Soaker",
+          "Ingredients": {
+            "Whole Wheat Flour": 56.5,
+            "Rolled Oats": 56.5,
+            "Cornmeal": 56.5,
+            "Flaxseeds": 7,
+            "Bran (Oat or Wheat)": 7,
+            "Salt": 4,
+            "Water": 140
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "Mix all ingredients, cover and rest at room temp over night.",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "Rye Flour": 51.3,
+            "Starter": 10.3,
+            "Water": 51.3
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Shape",
+          "Ingredients": {
+            "Soaker": 327,
+            "Levain": 93,
+            "Whole Wheat Flour": 56.5,
+            "Salt": 5,
+            "Sunflower Seeds": 28.5,
+            "Pumpkin Seeds": 28.5,
+            "Sesame Seeds": 28.5,
+            "Bread Flour": 227,
+            "Water": 139.5
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Ferment": 0,
+              "First Folds": 30,
+              "2nd Folds": 60,
+              "3rd Folds": 90,
+              "4th Folds": 120
+            },
+            "MinsFromEnd": {
+              "Pre-shape": 60,
+              "Final Shape": 30,
+              "Put In Fridge": 0
+            }
+          },
+          "Notes": "I added more water to the ingredients list."
+        },
+        {
+          "Day": 3,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start BBQ Bake, Add Water, Set on High": 0,
+              "Lid Off, Set on Low": 35,
+              "End Bake": 65
+            }
+          },
+          "Notes": ""
+        }
+      ]
+    },
+    "Country Bread (Tartine)": {
+      "Source": "Tartine",
+      "RecipeCount": 2,
+      "MyDefaultCount": 2,
+      "MyDefaultSize": 850,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "Flour": 100,
+            "Water": 100,
+            "Starter": 20
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 2,
+          "Title": "Autolyse",
+          "Ingredients": {
+            "White Flour": 900,
+            "Whole Wheat Flour": 100,
+            "Water": 750
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Autolyse": 0,
+              "End Autolyse, Start Next Step": 90
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Shape",
+          "Ingredients": {
+            "Salt": 20,
+            "Levain": 200
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Ferment, Add Remaining Ingredents": 0,
+              "First Folds": 30,
+              "2nd Folds": 60,
+              "3rd Folds": 90,
+              "4th Folds": 120
+            },
+            "MinsFromEnd": {
+              "Pre-shape": 60,
+              "Final Shape": 30,
+              "Put In Fridge": 0
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 3,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start BBQ Bake, Add Water, Set on High": 0,
+              "Lid Off, Set on Low": 35,
+              "End Bake": 65
+            }
+          },
+          "Notes": ""
+        }
+      ]
+    },
+    "Whole Wheat Sourdough": {
+      "Source": "Tartine",
+      "RecipeCount": 2,
+      "MyDefaultCount": 2,
+      "MyDefaultSize": 850,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "Flour": 100,
+            "Water": 100,
+            "Starter": 20
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 2,
+          "Title": "Autolyse",
+          "Ingredients": {
+            "White Flour": 300,
+            "Whole Wheat Flour": 700,
+            "Water": 800
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Autolyse": 0,
+              "End Autolyse, Start Next Step": 90
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Shape",
+          "Ingredients": {
+            "Salt": 20,
+            "Levain": 200
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Ferment, Add Ingredients ": 0,
+              "First Folds": 30,
+              "2nd Folds": 60,
+              "3rd Folds": 90,
+              "4th Folds": 120
+            },
+            "MinsFromEnd": {
+              "Pre-shape": 60,
+              "Final Shape": 30,
+              "Put In Fridge": 0
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 3,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start BBQ Bake, Add Water, Set on High": 0,
+              "Lid Off, Set on Low": 35,
+              "End Bake": 65
+            }
+          },
+          "Notes": ""
+        }
+      ]
+    },
+    "Rye Twenty-Five": {
+      "Source": "The Perfect Loaf, p.157",
+      "RecipeCount": 1,
+      "MyDefaultCount": 2,
+      "MyDefaultSize": 850,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "Flour": 50,
+            "Water": 50,
+            "Starter": 10
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 2,
+          "Title": "Autolyse",
+          "Ingredients": {
+            "White Flour": 406,
+            "Whole Rye Flour": 104,
+            "Water": 345
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Autolyse": 0,
+              "End Autolyse, Start Next Step": 90
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Shape",
+          "Ingredients": {
+            "Water": 54,
+            "Salt": 10,
+            "Levain": 81
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Ferment, Add Ingredients ": 0,
+              "First Folds": 30,
+              "2nd Folds": 60,
+              "3rd Folds": 90,
+              "4th Folds": 120
+            },
+            "MinsFromEnd": {
+              "Pre-shape": 60,
+              "Final Shape": 30,
+              "Put In Fridge": 0
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 3,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start BBQ Bake, Add Water, Set on High": 0,
+              "Lid Off, Set on Low": 35,
+              "End Bake": 70
+            }
+          },
+          "Notes": ""
+        }
+      ]
+    },
+    "High Hyd White Sourdough": {
+      "Source": "The Perfect Loaf, p.257",
+      "RecipeCount": 2,
+      "MyDefaultCount": 2,
+      "MyDefaultSize": 900,
+      "Notes": "This is a high (85%) hydration loaf.",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "Flour": 60,
+            "Water": 61,
+            "Starter": 30
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 2,
+          "Title": "Autolyse",
+          "Ingredients": {
+            "White Flour": 822,
+            "Whole Wheat Flour": 64,
+            "Water 1": 650
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Autolyse": 0,
+              "End Autolyse, Start Next Step": 90
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Shape",
+          "Ingredients": {
+            "Water 2 (As needed)": 95,
+            "Salt": 17,
+            "Levain": 151
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Ferment": 0,
+              "First Folds": 15,
+              "2nd Folds": 30,
+              "3rd Folds": 45,
+              "4th Folds": 75,
+              "5th Folds": 105,
+              "6th Folds": 135
+            },
+            "MinsFromEnd": {
+              "Pre-shape": 60,
+              "Final Shape": 30,
+              "Put In Fridge": 0
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 3,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start BBQ Bake, Add Water, Set on High": 0,
+              "Lid Off, Set on Low": 35,
+              "End Bake": 70
+            }
+          },
+          "Notes": ""
+        }
+      ]
+    },
+    "SD Whole Wheat Hearth Bread": {
+      "Source": "Whole Grain Breads, p.153",
+      "RecipeCount": 1,
+      "MyDefaultCount": 1,
+      "MyDefaultSize": 900.0,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain (instead of Biga)",
+          "Ingredients": {
+            "Whole Wheat Flour": 227,
+            "Water": 170,
+            "Starter": 40
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "Refresh starter. Ferment starter and levain overnight.",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 1,
+          "Title": "Make the Soaker",
+          "Ingredients": {
+            "Whole Wheat Flour": 227,
+            "Water": 170,
+            "Salt": 4
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "Soak overnight at room temp."
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Bake",
+          "Ingredients": {
+            "Levain": 398,
+            "Soaker": 401,
+            "Whole Wheat Flour": 28.5,
+            "Salt": 5,
+            "Instant Yeast": 7,
+            "Honey": 14,
+            "Unsalted Butter or OO": 14
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Mix Ingredients, Pause for 5 min, Kneed, Cover": 0,
+              "Start BBQ Bake, Add Water, Set on High": 60,
+              "Lid Off, Set on Low": 95,
+              "End Bake": 130
+            }
+          },
+          "Notes": "Dough should be 1.5 times original size."
+        }
+      ]
+    }
+  },
+  "Yeasted Bread": {
+    "English Muffin Toasting Bread": {
+      "Source": "kingaurthurbaking.com",
+      "RecipeCount": 1,
+      "RecipeSize": 707,
+      "MyDefaultCount": 1,
+      "MyDefaultSize": 707,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Mix Dry Ingredients",
+          "Ingredients": {
+            "All Purpose Flour": 360,
+            "Granulated Sugar": 14,
+            "Salt": 9,
+            "Baking Soda": 3,
+            "Instant Yeast": 12,
+            "Powdered Milk": 36
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "None": 0
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 1,
+          "Title": "Mix Wet Ingredients, then Mix All",
+          "Ingredients": {
+            "Water": 248,
+            "Oil": 25
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "None": 0
+            }
+          },
+          "Notes": "Separately mix wet ingredents and heat to 125F. Combine wet and dry. Mix on high for 1 minute until elastic. Lightly grease pan and sprinkle with cornmeal. Add dough to loaf pan. Cover the pan."
+        },
+        {
+          "Day": 1,
+          "Title": "Ferment in Pan",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Make dough and add to covered pan": 0,
+              "Pre-heat oven to 400": 15,
+              "Move to baking Step": 50
+            }
+          },
+          "Notes": "Dough should finish fermenting when it is slightly over the top of the pan. 45 min - 1 hr."
+        },
+        {
+          "Day": 1,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Remove cover and start bake": 0,
+              "End Bake at 190F, keep in pan": 25,
+              "Remove from pan and let cool": 30
+            }
+          },
+          "Notes": "Bake to 190F for 22-27 mins. Let cool completely before slicing."
+        }
+      ]
+    },
+    "Ciabatta (PR)": {
+      "Source": "Artisan Breads Every Day, p.52",
+      "RecipeCount": 2,
+      "RecipeSize": 525,
+      "MyDefaultCount": 1,
+      "MyDefaultSize": 1200,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Mix Ingredients",
+          "Ingredients": {
+            "Bread Flour": 567,
+            "Salt": 11,
+            "Instant Yeast": 4,
+            "Chilled Water (55 F)": 454,
+            "Olive Oil (after 1st Rest)": 14
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Mix (minus oil), then Start 1st Rest": 0,
+              "Mix in oil, then Start 2nd Rest": 5,
+              "1st Stretch and Folds": 15,
+              "2nd Stretch and Folds": 25,
+              "3rd Stretch and Folds": 35,
+              "4th S&F, then Fridge": 45
+            }
+          },
+          "Notes": "Mix, rest, add oil, 4 S&Fs, then into the fridge."
+        },
+        {
+          "Day": 2,
+          "Title": "Remove from Fridge and Shape",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Take from Fridge, flour parchment & pan": 0,
+              "Pre-Shape": 60,
+              "Final Shape on parchment": 120,
+              "Start Bake with Next Step": 180
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 2,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start BBQ Bake, Add Water, Set on High": 0,
+              "Lid Off, Set on Low": 25,
+              "End Bake": 50
+            }
+          },
+          "Notes": ""
+        }
+      ]
+    }
+  },
+  "Flatbreads": {
+    "Sourdough Pizza Dough": {
+      "Source": "The Perfect Loaf p.294",
+      "MyDefaultCount": 4,
+      "MyDefaultSize": 250,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "Flour": 47,
+            "Water": 47,
+            "Starter": 5
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "",
+          "ExcludeFromOriginalWeightCalc": 1
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Shape",
+          "Ingredients": {
+            "Water": 435,
+            "Whole Wheat Flour": 70,
+            "Type 00 flour or 11.5% flour": 582,
+            "Salt": 14,
+            "Levain": 99
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Ferment": 0,
+              "First Folds": 30,
+              "2nd Folds": 60,
+              "3rd Folds": 90
+            },
+            "MinsFromEnd": {
+              "Pre-shape": 30,
+              "Final Shape and Fridge": 0
+            }
+          },
+          "Notes": "After fermenting, shape into equal balls, and place on a covered sheet pan, and place in the fridge."
+        },
+        {
+          "Day": 3,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "Take from fridge about 2 hours before using."
+        }
+      ]
+    },
+    "Pita (Sourdough)": {
+      "Source": "The Perfect Loaf, p.328",
+      "RecipeCount": 10,
+      "MyDefaultCount": 10,
+      "MyDefaultSize": 104,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "White Flour": 92,
+            "Water": 92,
+            "Starter": 9
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 2,
+          "Title": "Mix Ingredients",
+          "Ingredients": {
+            "White Flour": 395,
+            "Whole Wheat Flour": 86,
+            "Neutral Oil (Canola)": 52,
+            "Superfine Sugar": 17,
+            "Water": 286,
+            "Fine Sea Salt": 11,
+            "Levain": 193
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Mix Ingredients, Start Ferment": 0,
+              "Stretch and Fold 1": 10,
+              "Stretch and Fold 2": 50,
+              "Stretch and Fold 3": 80
+            },
+            "MinsFromEnd": {
+              "Start Next Step (Bake)": 0,
+              "Pre-heat oven to 500 F": 30,
+              "Pre-shape": 60
+            }
+          },
+          "Notes": "Mix, 3 S&Fs, then bake same day."
+        },
+        {
+          "Day": 2,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": "Bake for 2 mins on each side."
+        }
+      ]
+    }
+  },
+  "Rolls": {
+    "Hamburger/Hotdog Buns": {
+      "Source": "Bread Bakers Apprentice",
+      "RecipeCount": 12,
+      "MyDefaultCount": 12,
+      "MyDefaultSize": 99,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Mix Ingredients in Mixer",
+          "Ingredients": {
+            "Bread Flour": 610,
+            "Salt": 11,
+            "Powdered Milk": 38,
+            "Sugar": 25,
+            "Instant Yeast": 6,
+            "Egg, slightly beaten, room temp": 47,
+            "Butter, room temp": 47,
+            "Water, room temp": 383
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Combine and mix on low": 0,
+              "Mix on High": 4,
+              "Stop mixing": 12
+            }
+          },
+          "Notes": "Mix until the dough passes the window pane test and registers 80 degrees."
+        },
+        {
+          "Day": 1,
+          "Title": "Bulk Ferment",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start bulk ferment.": 0,
+              "Bulk ferment is over.": 105
+            }
+          },
+          "Notes": "Bulk ferment for 1.5 to 2 hours until dough doubles in size."
+        },
+        {
+          "Day": 1,
+          "Title": "Divide and Final rise",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start final rise after rolls are in pan": 0,
+              "Final rise is over.": 75
+            }
+          },
+          "Notes": "Split into 12 (or other quanitiy) even pieces. Shape  each piece and place on a greased sheet pan. Cover the pan with plastic wrap. Rise for 60 to 90 minutes until dough nearly doubles in size. Pre-heat oven to 400 degrees."
+        },
+        {
+          "Day": 1,
+          "Title": "Egg wash, garnish, and Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Bake": 0,
+              "End Bake": 15
+            }
+          },
+          "Notes": "Add egg wash and garnish with sesame or poppy seeds. Bake for 15 minutes until golden brown and internal temp is 180 degrees. Let cool for at least 15 minutes on a rack before serving."
+        }
+      ]
+    },
+    "Cheddar Beer Bread Rolls": {
+      "Source": "NYT Cooking App",
+      "RecipeCount": 16,
+      "MyDefaultCount": 12,
+      "MyDefaultSize": 100,
+      "Notes": "Original recipe is for large 12 rolls total 1663 grams. Anything over that will not fit in a Kitchenaid Artisan Mixer",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Mix Ingredients in Mixer",
+          "Ingredients": {
+            "Bread Flour": 815,
+            "Yeast": 11,
+            "Salt": 12,
+            "Softened Butter": 30,
+            "Honey": 85,
+            "Beer": 480
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Combine and mix on low": 0,
+              "Mix on High": 4,
+              "Stop and add cheese in next step": 6
+            }
+          },
+          "Notes": "In stand mixer mix ingredients on low for 4 minutes then on high for 2 minutes."
+        },
+        {
+          "Day": 1,
+          "Title": "Add cheese to mixer bowl, then bulk ferment",
+          "Ingredients": {
+            "Cheddar cheese": 115
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Mix in cheese then add all to bowl. Start bulk ferment.": 0,
+              "Bulk ferment is over.": 60
+            }
+          },
+          "Notes": "Mix in cheese for 30 seconds to 1 minute then bulk ferment for about an hour until it has about doubled. Lighly grease a 9x13 inch pan."
+        },
+        {
+          "Day": 1,
+          "Title": "Final rise",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start final rise after rolls are in pan": 0,
+              "Final rise is over.": 40
+            }
+          },
+          "Notes": "Split into 12 (or other quanitiy) even pieces. Gently round each piece and place in greased pan. Cover the pan with plastic wrap. Rise for 35-45 minutes. Pre-heat oven to 400 degrees."
+        },
+        {
+          "Day": 1,
+          "Title": "Bake",
+          "Ingredients": {
+            "Melted butter": 30,
+            "Cheddar cheese": 85
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Bake": 0,
+              "End Bake": 20
+            }
+          },
+          "Notes": "Add cheese and butter to top of rolls. Bake for 17-22 minutes until golden brown and internal temp is 190 degrees."
+        }
+      ]
+    }
+  },
+  "Other": {
+    "Template": {
+      "Source": "",
+      "RecipeCount": 0,
+      "MyDefaultCount": 0,
+      "MyDefaultSize": 0,
+      "Notes": "",
+      "Steps": [
+        {
+          "Day": 1,
+          "Title": "Make Levain",
+          "Ingredients": {
+            "Flour": 100,
+            "Water": 100,
+            "Starter": 20
+          },
+          "Timing": {
+            "None": 0
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 2,
+          "Title": "Ferment and Shape",
+          "Ingredients": {
+            "Water 2 (As needed)": 100,
+            "Salt": 20,
+            "Levain": 200
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start Ferment": 0,
+              "First Folds": 0,
+              "2nd Folds": 0,
+              "3rd Folds": 0,
+              "4th Folds": 0
+            },
+            "MinsFromEnd": {
+              "Pre-shape": 0,
+              "Final Shape": 0,
+              "Put In Fridge": 0
+            }
+          },
+          "Notes": ""
+        },
+        {
+          "Day": 3,
+          "Title": "Bake",
+          "Ingredients": {
+            "None": 0
+          },
+          "Timing": {
+            "MinsFromStart": {
+              "Start BBQ Bake, Add Water, Set on High": 0,
+              "Lid Off, Set on Low": 0,
+              "End Bake": 0
+            }
+          },
+          "Notes": ""
+        }
+      ]
+    },
+    "Dictionary Notes": {
+      "Recipe Count": "This is the number of breads in the original recipe",
+      "MyDefaultCount": "This is the number of breads that will show up when you are prompted for how many breads you want",
+      "MyDefaultSize": "This is the size of EACH bread",
+      "ExcludeFromOriginalWeightCalc": "This tells the app not to include the current step's ingredents in the total weight. Usually this is used for a Levain where the there is extra made and the actual weight is included in the next step."
+    }
+  }
+}

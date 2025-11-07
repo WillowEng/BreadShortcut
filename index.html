@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bread Shortcut</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+      background: #f7fafc;
+      color: #1a202c;
+    }
+    h1 { text-align: center; margin-bottom: 1.5rem; }
+    input, button {
+      width: 100%;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #2f855a;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #38a169; }
+    .hidden { display: none; }
+    pre {
+      background: #edf2f7;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    #msg { margin: 0.5rem 0; color: #155724; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <h1>Bread Shortcut</h1>
+  <div id="msg"></div>
+
+  <!-- Login / Signup -->
+  <div id="auth-view">
+    <h3>Sign in or create an account</h3>
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="login-btn">Continue</button>
+  </div>
+
+  <!-- Selector -->
+  <div id="select-view" class="hidden">
+    <h3>Select JSON to view</h3>
+    <button data-type="bread-dict">Bread Dict</button>
+    <button data-type="sd-ferment-timing">SD Ferment Timing</button>
+    <button data-type="shortcut-settings">Shortcut Settings</button>
+    <button id="logout-btn" style="background:#718096;margin-top:1rem;">Logout</button>
+    <pre id="json-display"></pre>
+  </div>
+
+  <script>
+    // --- Supabase setup ---
+    const SUPABASE_URL = "https://wxyjexituglbdyrirngj.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_EOo0sH3tQgN0AuyxJwlpCw_D-OAZ5sw";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // --- Elements ---
+    const msg = document.getElementById("msg");
+    const authView = document.getElementById("auth-view");
+    const selectView = document.getElementById("select-view");
+    const jsonDisplay = document.getElementById("json-display");
+
+    let currentUser = null;
+
+    // --- Helpers ---
+    function flash(text, color = "#155724") {
+      msg.style.color = color;
+      msg.textContent = text;
+      console.log(text);
+    }
+
+    function show(view) {
+      [authView, selectView].forEach(v => v.classList.add("hidden"));
+      view.classList.remove("hidden");
+    }
+
+    // --- Combined Sign Up + Login ---
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      if (!email || !password) return flash("Enter email and password", "red");
+
+      flash("Attempting login/signup...");
+
+      // Try sign up first
+      const { data: signup, error: signErr } = await supabaseClient.auth.signUp({ email, password });
+
+      if (signErr && signErr.message.includes("registered")) {
+        // If user already exists, log them in
+        const { data: signin, error: loginErr } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (loginErr) return flash("Login error: " + loginErr.message, "red");
+        currentUser = signin.user;
+        flash("Welcome back, " + currentUser.email);
+      } else if (signErr) {
+        return flash("Signup error: " + signErr.message, "red");
+      } else {
+        currentUser = signup.user;
+        flash("New user created: " + currentUser.email);
+      }
+
+      if (!currentUser) return flash("User not found after login.", "red");
+
+      await ensureDefaults(currentUser.id);
+      show(selectView);
+    });
+
+    // --- Logout ---
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      flash("Logged out.");
+      show(authView);
+    });
+
+    // --- Insert default JSONs if needed ---
+    async function ensureDefaults(userId) {
+      try {
+        flash("Checking defaults...");
+
+        const { data: rows } = await supabaseClient
+          .from("bread_dicts")
+          .select("type")
+          .eq("user_id", userId);
+
+        if (rows && rows.length > 0) {
+          flash("Defaults already exist.");
+          return;
+        }
+
+        flash("Loading default JSON files...");
+        const bread = await (await fetch("bread-dict.json")).json();
+        const timing = await (await fetch("sd-ferment-timing.json")).json();
+        const settings = await (await fetch("shortcut-settings.json")).json();
+
+        const { error } = await supabaseClient.from("bread_dicts").insert([
+          { user_id: userId, type: "bread-dict", data: bread },
+          { user_id: userId, type: "sd-ferment-timing", data: timing },
+          { user_id: userId, type: "shortcut-settings", data: settings }
+        ]);
+
+        if (error) flash("Insert error: " + error.message, "red");
+        else flash("Defaults inserted successfully!");
+      } catch (err) {
+        flash("Error inserting defaults: " + err.message, "red");
+      }
+    }
+
+    // --- Fetch JSON data ---
+    document.querySelectorAll("#select-view button[data-type]").forEach(btn => {
+      btn.addEventListener("click", async e => {
+        const type = e.target.dataset.type;
+        const { data, error } = await supabaseClient
+          .from("bread_dicts")
+          .select("data")
+          .eq("user_id", currentUser.id)
+          .eq("type", type)
+          .single();
+
+        if (error) return flash("Error loading: " + error.message, "red");
+        jsonDisplay.textContent = JSON.stringify(data.data, null, 2);
+      });
+    });
+
+    // --- Auto-login if session exists ---
+    (async () => {
+      const { data } = await supabaseClient.auth.getUser();
+      if (data?.user) {
+        currentUser = data.user;
+        flash("Welcome back, " + currentUser.email);
+        show(selectView);
+      }
+    })();
+  </script>
+</body>
+</html>
