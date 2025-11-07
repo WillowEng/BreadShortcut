@@ -4,24 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bread Shortcut</title>
+
+  <!-- Style frameworks -->
   <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/vanilla-jsoneditor@0.21.6/themes/jse-theme-default.min.css" rel="stylesheet">
+
+  <!-- Scripts -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-jsoneditor@0.21.6"></script>
+
   <style>
     main.container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 2rem auto;
-    }
-    textarea {
-      width: 100%;
-      min-height: 50vh;
-      font-family: monospace;
-      font-size: 0.9rem;
     }
     #msg {
       text-align: center;
       font-weight: 500;
     }
     .hidden { display: none; }
+    #jsoneditor {
+      height: 65vh;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
@@ -52,7 +59,7 @@
       <!-- EDITOR -->
       <article id="editor" class="hidden">
         <h4 id="editor-title"></h4>
-        <textarea id="json-editor"></textarea>
+        <div id="jsoneditor"></div>
         <footer>
           <button id="save-btn" class="primary">Save Changes</button>
           <button id="reset-btn" class="secondary">Reset</button>
@@ -73,9 +80,12 @@
     const selectView = document.getElementById("select-view");
     const editor = document.getElementById("editor");
     const editorTitle = document.getElementById("editor-title");
-    const jsonEditor = document.getElementById("json-editor");
+    const jsonContainer = document.getElementById("jsoneditor");
+
     let currentUser = null;
     let currentType = null;
+    let currentJson = {};
+    let editorInstance = null;
 
     // --- Helpers ---
     function flash(text, color="#155724") {
@@ -83,6 +93,7 @@
       msg.textContent = text;
       console.log(text);
     }
+
     function show(view) {
       [authView, selectView].forEach(v => v.classList.add("hidden"));
       view.classList.remove("hidden");
@@ -166,16 +177,45 @@
           .single();
 
         if (error) return flash("Error loading: " + error.message, "red");
+
+        currentJson = data.data;
         editorTitle.textContent = "Editing: " + currentType;
-        jsonEditor.value = JSON.stringify(data.data, null, 2);
-        editor.classList.remove("hidden");
+        showEditor(currentJson);
       });
     });
 
-    // --- Save JSON back to Supabase ---
+    // --- Initialize or Update JSONEditor ---
+    function showEditor(data) {
+      editor.classList.remove("hidden");
+
+      if (!editorInstance) {
+        editorInstance = new window.JSONEditor({
+          target: jsonContainer,
+          props: {
+            mode: "tree",
+            mainMenuBar: true,
+            navigationBar: false,
+            statusBar: false,
+            content: { json: data },
+            onChange: () => {
+              try {
+                const updated = editorInstance.get();
+                currentJson = updated.json;
+              } catch (e) {
+                console.warn("Invalid JSON edit", e);
+              }
+            }
+          }
+        });
+      } else {
+        editorInstance.set({ json: data });
+      }
+    }
+
+    // --- Save JSON to Supabase ---
     document.getElementById("save-btn").addEventListener("click", async () => {
       try {
-        const updated = JSON.parse(jsonEditor.value);
+        const updated = currentJson;
         const { error } = await supabaseClient
           .from("bread_dicts")
           .update({ data: updated })
@@ -184,11 +224,11 @@
         if (error) throw error;
         flash("Saved successfully!");
       } catch (err) {
-        flash("Invalid JSON or save error: " + err.message, "red");
+        flash("Save error: " + err.message, "red");
       }
     });
 
-    // --- Reset JSON to last saved ---
+    // --- Reset JSON to Last Saved Version ---
     document.getElementById("reset-btn").addEventListener("click", async () => {
       const { data, error } = await supabaseClient
         .from("bread_dicts")
@@ -197,11 +237,12 @@
         .eq("type", currentType)
         .single();
       if (error) return flash("Error reloading: " + error.message, "red");
-      jsonEditor.value = JSON.stringify(data.data, null, 2);
+      currentJson = data.data;
+      editorInstance.set({ json: currentJson });
       flash("Reset to saved version.");
     });
 
-    // --- Auto-login if session still valid ---
+    // --- Auto-login if Session Still Valid ---
     (async () => {
       const { data } = await supabaseClient.auth.getUser();
       if (data?.user) {
